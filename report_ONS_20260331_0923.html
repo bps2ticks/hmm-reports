@@ -1,0 +1,853 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Composite Regime Report — ONS</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Mono:wght@400;500&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0f0f0e;
+  --bg2: #161614;
+  --bg3: #1e1e1b;
+  --bg4: #252522;
+  --line: rgba(255,255,255,0.08);
+  --line2: rgba(255,255,255,0.14);
+  --text: #e8e4d8;
+  --text2: #9b9688;
+  --text3: #5c5a54;
+  --gold: #c9a84c;
+  --gold2: #f0cc7a;
+  --teal: #4db89a;
+  --red: #c95c5c;
+  --blue: #6ea8d8;
+  --amber: #d4894a;
+  --font-head: 'DM Serif Display', Georgia, serif;
+  --font-body: 'Instrument Sans', sans-serif;
+  --font-mono: 'DM Mono', monospace;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: var(--font-body);
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  padding: 40px 20px 80px;
+  line-height: 1.65;
+}
+
+.page {
+  max-width: 760px;
+  margin: 0 auto;
+}
+
+.masthead {
+  border-bottom: 0.5px solid var(--line2);
+  padding-bottom: 28px;
+  margin-bottom: 40px;
+}
+
+.label-small {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 10px;
+}
+
+h1 {
+  font-family: var(--font-head);
+  font-size: 38px;
+  font-weight: 400;
+  color: var(--text);
+  line-height: 1.15;
+  margin-bottom: 12px;
+}
+
+.intro {
+  font-size: 15px;
+  color: var(--text2);
+  max-width: 560px;
+  line-height: 1.7;
+}
+
+.raw-block {
+  background: var(--bg2);
+  border: 0.5px solid var(--line2);
+  border-left: 3px solid var(--gold);
+  border-radius: 4px;
+  padding: 18px 20px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--text2);
+  line-height: 1.9;
+  margin: 32px 0;
+  white-space: pre;
+  overflow-x: auto;
+}
+
+.raw-block .hi { color: var(--gold2); }
+.raw-block .val { color: var(--teal); }
+.raw-block .warn { color: var(--amber); }
+
+.section {
+  margin-bottom: 44px;
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 20px;
+  padding-bottom: 12px;
+  border-bottom: 0.5px solid var(--line);
+}
+
+.section-tag {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--bg);
+  background: var(--gold);
+  padding: 3px 9px;
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+
+.section-tag.teal { background: var(--teal); }
+.section-tag.red { background: var(--red); }
+.section-tag.blue { background: var(--blue); }
+.section-tag.amber { background: var(--amber); }
+
+h2 {
+  font-family: var(--font-head);
+  font-size: 22px;
+  font-weight: 400;
+  color: var(--text);
+}
+
+.stat-row {
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  gap: 0;
+  border-bottom: 0.5px solid var(--line);
+  padding: 14px 0;
+  align-items: start;
+}
+
+.stat-row:last-child { border-bottom: none; }
+
+.stat-name {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--gold);
+  padding-right: 20px;
+  padding-top: 1px;
+  flex-shrink: 0;
+}
+
+.stat-value {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--teal);
+  margin-bottom: 6px;
+}
+
+.stat-explain {
+  font-size: 13.5px;
+  color: var(--text2);
+  line-height: 1.6;
+}
+
+.callout {
+  background: var(--bg3);
+  border: 0.5px solid var(--line2);
+  border-left: 3px solid var(--teal);
+  border-radius: 4px;
+  padding: 16px 18px;
+  margin: 16px 0;
+  font-size: 13.5px;
+  color: var(--text2);
+  line-height: 1.65;
+}
+
+.callout.warn { border-left-color: var(--amber); }
+.callout.danger { border-left-color: var(--red); }
+.callout.gold { border-left-color: var(--gold); }
+
+.callout strong {
+  color: var(--text);
+  font-weight: 500;
+}
+
+.analogy-box {
+  background: var(--bg2);
+  border: 0.5px solid var(--line2);
+  border-radius: 6px;
+  padding: 20px 22px;
+  margin: 20px 0;
+}
+
+.analogy-label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 10px;
+}
+
+.analogy-text {
+  font-size: 14px;
+  color: var(--text);
+  line-height: 1.7;
+  font-style: italic;
+}
+
+.practical-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin: 16px 0;
+}
+
+.practical-card {
+  background: var(--bg3);
+  border: 0.5px solid var(--line2);
+  border-radius: 6px;
+  padding: 16px 18px;
+}
+
+.practical-card .pnum {
+  font-family: var(--font-mono);
+  font-size: 20px;
+  color: var(--gold);
+  margin-bottom: 6px;
+}
+
+.practical-card p {
+  font-size: 13px;
+  color: var(--text2);
+  line-height: 1.6;
+}
+
+.practical-card p strong {
+  color: var(--text);
+  font-weight: 500;
+  display: block;
+  margin-bottom: 4px;
+  font-size: 13.5px;
+}
+
+.level-vis {
+  background: var(--bg2);
+  border: 0.5px solid var(--line2);
+  border-radius: 6px;
+  padding: 20px;
+  margin: 16px 0;
+  font-family: var(--font-mono);
+  font-size: 12px;
+}
+
+.level-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 5px 0;
+  border-bottom: 0.5px solid var(--line);
+}
+.level-row:last-child { border-bottom: none; }
+
+.level-label { color: var(--text3); width: 70px; flex-shrink: 0; }
+.level-bar-wrap { flex: 1; position: relative; height: 6px; background: var(--bg4); border-radius: 3px; }
+.level-bar { position: absolute; top: 0; height: 100%; border-radius: 3px; }
+.level-price { color: var(--text); width: 70px; text-align: right; flex-shrink: 0; }
+.level-desc { color: var(--text2); font-size: 11px; width: 130px; flex-shrink: 0; }
+
+.transition-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  margin: 12px 0;
+}
+
+.trans-card {
+  background: var(--bg3);
+  border: 0.5px solid var(--line2);
+  border-radius: 6px;
+  padding: 12px;
+  text-align: center;
+}
+
+.trans-pct {
+  font-family: var(--font-mono);
+  font-size: 18px;
+  font-weight: 500;
+  margin-bottom: 4px;
+}
+
+.trans-label {
+  font-size: 11px;
+  color: var(--text3);
+  line-height: 1.4;
+}
+
+.divider {
+  border: none;
+  border-top: 0.5px solid var(--line);
+  margin: 40px 0;
+}
+
+.summary-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+  margin: 16px 0;
+}
+
+.summary-table th {
+  text-align: left;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--text3);
+  padding: 8px 12px;
+  border-bottom: 0.5px solid var(--line2);
+  font-weight: 400;
+}
+
+.summary-table td {
+  padding: 10px 12px;
+  border-bottom: 0.5px solid var(--line);
+  vertical-align: top;
+}
+
+.summary-table td:first-child {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--gold);
+  white-space: nowrap;
+}
+
+.summary-table td:nth-child(2) {
+  color: var(--teal);
+  font-family: var(--font-mono);
+  font-size: 12px;
+}
+
+.summary-table td:nth-child(3) {
+  color: var(--text2);
+  line-height: 1.55;
+}
+
+.footer-note {
+  margin-top: 60px;
+  padding-top: 24px;
+  border-top: 0.5px solid var(--line);
+  font-size: 12px;
+  color: var(--text3);
+  font-family: var(--font-mono);
+  line-height: 1.7;
+}
+
+@media (max-width: 580px) {
+  h1 { font-size: 28px; }
+  .stat-row { grid-template-columns: 1fr; gap: 6px; }
+  .practical-grid { grid-template-columns: 1fr; }
+  .transition-grid { grid-template-columns: repeat(2, 1fr); }
+  .level-desc { display: none; }
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="masthead">
+    <div class="label-small">Composite Regime Report &middot; 2026-03-31 08:23 CST</div>
+    <h1>ONS Strategy</h1>
+    <p class="intro">Anchor Range: 200.75 pts &middot; NQ E-Mini Futures &middot; 1-Minute Bars</p>
+  </div>
+
+  <div class="raw-block"><span class="hi">Anchor Range:</span> <span class="val">200.75 pts</span>
+
+<span class="hi">BIAS</span>
+  BIAS: Bearish (strength: <span class="warn">22%</span>)
+  O-U Z: <span class="val">+0.65</span> | HMM: S3 Fade Setup (85%) | Regime: Young
+  Bayesian drift: <span class="val">+0.2377 pts/bar</span>
+
+<span class="hi">LEVELS</span>
+  Fair Value: <span class="val">23,348</span>   Current: 23,390 (z = +0.65)
+  +1s: 23,413 | -1s: 23,284
+  +2s: 23,477 | -2s: 23,219
+  +3s: 23,541 | -3s: 23,155
+  Sigma: 64 pts/sigma
+
+<span class="hi">EXPANSION</span>
+  P(3s before mu): <span class="warn">21.8%</span> | Sigma: 64 pts (Expansion, 1.5x)
+
+<span class="hi">MOVE LIKELIHOOD (30 bars)</span>
+  50pt: 55% | 100pt: 5% | 150pt: 0% | 200pt: 0%
+  Posterior: Confident | Stop: 1.0x sigma (64 pts)
+
+<span class="hi">REGIME</span>
+  State S3 | WR: 85% | Remaining: ~2 bars | P(persist 5): 11%
+  ->S0: 1% | ->S1: 22% | ->S2: 11% | Stay S3: 65%
+
+<span class="hi">O-U DIAGNOSTICS</span>
+  MR: Yes | Theta: 0.0245 | Half-life: 28 bars</div>
+
+  <!-- ======= 01 BIAS ======= -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-tag">01</span>
+      <h2>Bias</h2>
+    </div>
+
+    <div class="stat-row">
+      <div>
+        <div class="stat-name">BIAS: Bearish (22%)</div>
+        <div class="stat-value">Weak bearish lean</div>
+      </div>
+      <div>
+        <div class="stat-explain">The model has a slight short lean — but 22% strength means this is a low-conviction call. Think of strength as a volume knob from 0–100%. At 22%, the bias exists but shouldn't be traded aggressively on its own. A reading above 60–70% is where you'd treat the bias as a meaningful edge.</div>
+      </div>
+    </div>
+
+    <div class="stat-row">
+      <div>
+        <div class="stat-name">O-U Z: +0.65</div>
+        <div class="stat-value">Above fair value</div>
+      </div>
+      <div>
+        <div class="stat-explain">Price is 0.65 sigma above fair value — meaningful but not extreme. Entries become more interesting as z approaches +/-1.5 to +/-2.5.</div>
+      </div>
+    </div>
+
+    <div class="stat-row">
+      <div>
+        <div class="stat-name">HMM: S3 Fade Setup (85%)</div>
+        <div class="stat-value">Fade Setup</div>
+      </div>
+      <div>
+        <div class="stat-explain">The Hidden Markov Model reads the current regime as a strong fade state — fading has historically worked 85% of the time. This is the model's way of saying the market is more likely to reverse short moves than follow through.</div>
+      </div>
+    </div>
+
+    <div class="stat-row">
+      <div>
+        <div class="stat-name">Bayesian drift: +0.2377</div>
+        <div class="stat-value">+0.2377 pts/bar</div>
+      </div>
+      <div>
+        <div class="stat-explain">The model estimates price is drifting up by 0.2377 points per bar. Over 30 bars that's roughly 7.1 points — enough to consider as a factor.</div>
+      </div>
+    </div>
+
+    
+
+    <div class="analogy-box">
+      <div class="analogy-label">Plain-English Summary</div>
+      <div class="analogy-text">"The model has a slight short lean — but 22% strength means this is a low-conviction call. Think of strength as a volume knob from 0–100%. At 22%, the bias exists but shouldn't be traded aggressively on its own. A reading above 60–70% is where you'd treat the bias as a meaningful edge."</div>
+    </div>
+  </div>
+
+  <!-- ======= 02 LEVELS ======= -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-tag teal">02</span>
+      <h2>Levels</h2>
+    </div>
+
+    <div class="stat-row">
+      <div>
+        <div class="stat-name">Fair Value: 23,348</div>
+        <div class="stat-value">The magnet</div>
+      </div>
+      <div>
+        <div class="stat-explain">This is where the model believes price "wants" to be based on recent data. When price deviates from fair value, there is a statistical pull back toward it. Think of fair value as a rubber band anchor — the further price stretches from it, the more tension there is to return.</div>
+      </div>
+    </div>
+
+    <div class="stat-row">
+      <div>
+        <div class="stat-name">Current: 23,390 (z = +0.65)</div>
+        <div class="stat-value">42 pts above fair value</div>
+      </div>
+      <div>
+        <div class="stat-explain">Price is 0.65 sigma above fair value — meaningful but not extreme. Entries become more interesting as z approaches +/-1.5 to +/-2.5.</div>
+      </div>
+    </div>
+
+    <div class="stat-row">
+      <div>
+        <div class="stat-name">Sigma: 64 pts/sigma</div>
+        <div class="stat-value">One standard deviation</div>
+      </div>
+      <div>
+        <div class="stat-explain">This is the model's measure of one "normal" move. Every level you see is built from multiples of this number. 64 points is large - it reflects current expansion volatility. Use this as your unit of measurement for everything else on this sheet.</div>
+      </div>
+    </div>
+
+    <div class="level-vis">
+      
+      <div class="level-row">
+        <div class="level-label">+3σ</div>
+        <div class="level-bar-wrap"><div class="level-bar" style="left:100%;right:0;background:var(--red);opacity:.5;"></div></div>
+        <div class="level-price">23,541</div>
+        <div class="level-desc" style="color:var(--red);opacity:.8;">Extreme &mdash; rare</div>
+      </div>
+      <div class="level-row">
+        <div class="level-label">+2σ</div>
+        <div class="level-bar-wrap"><div class="level-bar" style="left:83%;right:0;background:var(--amber);opacity:.5;"></div></div>
+        <div class="level-price">23,477</div>
+        <div class="level-desc" style="color:var(--amber);">Fade zone above</div>
+      </div>
+      <div class="level-row">
+        <div class="level-label">+1σ</div>
+        <div class="level-bar-wrap"><div class="level-bar" style="left:67%;right:0;background:var(--teal);opacity:.4;"></div></div>
+        <div class="level-price">23,413</div>
+        <div class="level-desc" style="color:var(--teal);">Upper equilibrium</div>
+      </div>
+      <div class="level-row">
+        <div class="level-label" style="color:var(--teal)">Price now</div>
+        <div class="level-bar-wrap"><div class="level-bar" style="left:61%;width:3%;background:var(--teal)"></div></div>
+        <div class="level-price" style="color:var(--teal)">23,390</div>
+        <div class="level-desc" style="color:var(--teal)">z = +0.65</div>
+      </div>
+      <div class="level-row">
+        <div class="level-label" style="color:var(--gold)">Fair value</div>
+        <div class="level-bar-wrap"><div class="level-bar" style="left:50%;width:2%;background:var(--gold)"></div></div>
+        <div class="level-price" style="color:var(--gold)">23,348</div>
+        <div class="level-desc" style="color:var(--gold)">Target / magnet</div>
+      </div>
+      <div class="level-row">
+        <div class="level-label">&minus;1σ</div>
+        <div class="level-bar-wrap"><div class="level-bar" style="left:0;right:67%;background:var(--teal);opacity:.4;"></div></div>
+        <div class="level-price">23,284</div>
+        <div class="level-desc" style="color:var(--text2);">Lower equilibrium</div>
+      </div>
+      <div class="level-row">
+        <div class="level-label">&minus;2σ</div>
+        <div class="level-bar-wrap"><div class="level-bar" style="left:0;right:83%;background:var(--amber);opacity:.5;"></div></div>
+        <div class="level-price">23,219</div>
+        <div class="level-desc" style="color:var(--amber);">Fade zone below</div>
+      </div>
+      <div class="level-row">
+        <div class="level-label">&minus;3σ</div>
+        <div class="level-bar-wrap"><div class="level-bar" style="left:0;right:100%;background:var(--red);opacity:.5;"></div></div>
+        <div class="level-price">23,155</div>
+        <div class="level-desc" style="color:var(--red);opacity:.8;">Extreme &mdash; rare</div>
+      </div>
+    </div>
+
+    <div class="callout gold">
+      <strong>How to use these levels in practice:</strong> The ±1σ levels (23,413 and 23,284) are your first targets and first caution zones. If price is below fair value and approaching &minus;1σ, that's a potential long entry. If it's already at &minus;1σ and moving toward &minus;2σ, the model is telling you things are stretched — either a strong fade opportunity or a sign the regime is breaking down.
+    </div>
+  </div>
+
+  <!-- ======= 03 EXPANSION ======= -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-tag amber">03</span>
+      <h2>Expansion</h2>
+    </div>
+
+    <div class="stat-row">
+      <div>
+        <div class="stat-name">P(3σ before μ): 21.8%</div>
+        <div class="stat-value">~2-in-10 chance of blow-off</div>
+      </div>
+      <div>
+        <div class="stat-explain">A 22% chance of a blow-off to 3-sigma before reversion. Roughly 2-in-10 times, a fade trade will get hit hard before working. Size accordingly.</div>
+      </div>
+    </div>
+
+    <div class="stat-row">
+      <div>
+        <div class="stat-name">Sigma: 64 pts (1.5x)</div>
+        <div class="stat-value">Elevated volatility mode</div>
+      </div>
+      <div>
+        <div class="stat-explain">The "1.5x" tag means sigma is running 45% above what the model considers baseline. The market is in an expansion volatility environment - moves are bigger than normal. Do not use normal-vol position sizes.</div>
+      </div>
+    </div>
+
+    
+    <div class="callout warn">
+      <strong>The key takeaway on expansion:</strong> With sigma at 64 points and a 1.5x multiplier, one full sigma move is 64 NQ points. If you're sizing for a 50-point stop, the math doesn't work here — the model is explicitly telling you this is a wide-range environment.
+    </div>
+  </div>
+
+  <!-- ======= 04 MOVE LIKELIHOOD ======= -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-tag blue">04</span>
+      <h2>Move Likelihood (30 bars)</h2>
+    </div>
+
+    
+    <div class="stat-row">
+      <div>
+        <div class="stat-name">50pt: 55%</div>
+        <div class="stat-value" style="color:var(--teal)">Coin flip for a 50-pt move</div>
+      </div>
+      <div>
+        <div class="stat-explain">Within the next 30 one-minute bars, there is a 55% probability of a 50-point move.</div>
+      </div>
+    </div>
+    <div class="stat-row">
+      <div>
+        <div class="stat-name">100pt: 5%</div>
+        <div class="stat-value" style="color:var(--red)">Unlikely</div>
+      </div>
+      <div>
+        <div class="stat-explain">Within the next 30 one-minute bars, there is a 5% probability of a 100-point move.</div>
+      </div>
+    </div>
+    <div class="stat-row">
+      <div>
+        <div class="stat-name">150pt: 0%</div>
+        <div class="stat-value" style="color:var(--red)">Unlikely</div>
+      </div>
+      <div>
+        <div class="stat-explain">Essentially zero chance of a 150-point move in the next 30 bars.</div>
+      </div>
+    </div>
+    <div class="stat-row">
+      <div>
+        <div class="stat-name">200pt: 0%</div>
+        <div class="stat-value" style="color:var(--text3)">Very unlikely</div>
+      </div>
+      <div>
+        <div class="stat-explain">Essentially zero chance of a 200-point move in the next 30 bars.</div>
+      </div>
+    </div>
+
+    <div class="stat-row">
+      <div>
+        <div class="stat-name">Posterior: Confident</div>
+        <div class="stat-value">Model trusts its estimates</div>
+      </div>
+      <div>
+        <div class="stat-explain">Confident means the Bayesian model has enough data that its parameter estimates are tight - the uncertainty bands around fair value and sigma are narrow. The model's math is on solid footing.</div>
+      </div>
+    </div>
+
+    <div class="stat-row">
+      <div>
+        <div class="stat-name">Stop: 1.0x sigma (64 pts)</div>
+        <div class="stat-value">Full sigma stop suggested</div>
+      </div>
+      <div>
+        <div class="stat-explain">The model recommends using 1.0x sigma as your stop distance — 64 points. A stop tighter than this has high probability of being hit by normal noise before the trade has time to work. If 64 points is too wide for your risk tolerance, the model is telling you to reduce position size, not tighten the stop.</div>
+      </div>
+    </div>
+
+    <div class="practical-grid">
+      <div class="practical-card">
+        <div class="pnum">01</div>
+        <p><strong>Use move probabilities as a hurdle</strong>Set realistic targets based on what the model says is achievable in 30 bars.</p>
+      </div>
+      <div class="practical-card">
+        <div class="pnum">02</div>
+        <p><strong>Respect the stop distance</strong>64 pts is the model's honest stop. If that's too large for your account, trade 1 contract instead of widening your risk profile.</p>
+      </div>
+      <div class="practical-card">
+        <div class="pnum">03</div>
+        <p><strong>"Confident" means trust the levels</strong>When the posterior is confident, the fair value and sigma levels are reliable. Trade toward them with conviction.</p>
+      </div>
+      <div class="practical-card">
+        <div class="pnum">04</div>
+        <p><strong>30 bars = 30 minutes on 1-min chart</strong>The move likelihood window is the next half hour. Don't expect the trade to play out all day — these are short-window probabilities.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======= 05 REGIME ======= -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-tag red">05</span>
+      <h2>Regime</h2>
+    </div>
+
+    <div class="stat-row">
+      <div>
+        <div class="stat-name">State S3 | Young</div>
+        <div class="stat-value">New regime, recently flipped</div>
+      </div>
+      <div>
+        <div class="stat-explain">The market is currently in regime S3 — a fade setup state. "Young" means this regime just started. It hasn't been running long enough to be trusted fully. Young regimes are real but fragile - they're more likely to reverse or transition than a mature regime.</div>
+      </div>
+    </div>
+
+    <div class="stat-row">
+      <div>
+        <div class="stat-name">WR: 85%</div>
+        <div class="stat-value">Historical win rate in S3</div>
+      </div>
+      <div>
+        <div class="stat-explain">When the market has been in S3 historically, fade trades have worked 85% of the time. That's a real edge - not enormous, but meaningful over many trades.</div>
+      </div>
+    </div>
+
+    <div class="stat-row">
+      <div>
+        <div class="stat-name">Remaining: ~2 bars</div>
+        <div class="stat-value">Regime is aging out</div>
+      </div>
+      <div>
+        <div class="stat-explain">The model estimates roughly 2 more bars of expected life left in this regime before it transitions. This is critical context: <em>don't enter a new trade deep into a dying regime.</em></div>
+      </div>
+    </div>
+
+    <div class="stat-row">
+      <div>
+        <div class="stat-name">P(persist 5): 11%</div>
+        <div class="stat-value">Only 11% chance it lasts 5 more bars</div>
+      </div>
+      <div>
+        <div class="stat-explain">There is only a 11% probability this regime persists for 5 more bars. That means 89% of the time, something changes before bar 5. Be cautious about new entries.</div>
+      </div>
+    </div>
+
+    <div class="transition-grid">
+      
+      <div class="trans-card">
+        <div class="trans-pct" style="color:var(--text3)">1%</div>
+        <div class="trans-label">&rarr; S0<br>Low probability</div>
+      </div>
+      <div class="trans-card">
+        <div class="trans-pct" style="color:var(--amber)">22%</div>
+        <div class="trans-label">&rarr; S1<br>Moderate shift</div>
+      </div>
+      <div class="trans-card">
+        <div class="trans-pct" style="color:var(--amber)">11%</div>
+        <div class="trans-label">&rarr; S2<br>Moderate shift</div>
+      </div>
+      <div class="trans-card">
+        <div class="trans-pct" style="color:var(--teal)">65%</div>
+        <div class="trans-label">Stay S3<br>Most likely</div>
+      </div>
+    </div>
+
+    <div class="callout">
+      <strong>Reading the transition probabilities:</strong> Bar-by-bar, S3 has moderate persistence. But the young + 2 bars remaining context overrides this.
+    </div>
+  </div>
+
+  <!-- ======= 06 O-U DIAGNOSTICS ======= -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-tag">06</span>
+      <h2>O-U Diagnostics</h2>
+    </div>
+
+    <div class="stat-row">
+      <div>
+        <div class="stat-name">MR: Yes</div>
+        <div class="stat-value">Mean reversion confirmed</div>
+      </div>
+      <div>
+        <div class="stat-explain">The model has statistically confirmed that this instrument is mean-reverting under current conditions. This is the green light that the entire O-U framework is valid right now.</div>
+      </div>
+    </div>
+
+    <div class="stat-row">
+      <div>
+        <div class="stat-name">Theta: 0.0245</div>
+        <div class="stat-value">Strong pull</div>
+      </div>
+      <div>
+        <div class="stat-explain">Theta is the reversion speed — how strongly price is pulled back toward fair value each bar. High theta - strong snap-back tendency. Trades resolve faster.</div>
+      </div>
+    </div>
+
+    <div class="stat-row">
+      <div>
+        <div class="stat-name">Half-life: 28 bars</div>
+        <div class="stat-value">~0 hours on 1-min chart</div>
+      </div>
+      <div>
+        <div class="stat-explain">Half-life is 28 bars (28 minutes). This is a fast-reversion environment — trades should resolve relatively quickly.</div>
+      </div>
+    </div>
+
+    
+  </div>
+
+  <hr class="divider">
+
+  <!-- ======= QR SUMMARY ======= -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-tag teal">QR</span>
+      <h2>Quick-Reference Summary</h2>
+    </div>
+
+    <table class="summary-table">
+      <tr>
+        <th>Stat</th>
+        <th>Reading</th>
+        <th>What it means for you</th>
+      </tr>
+      
+      <tr>
+        <td>Bias strength 22%</td>
+        <td>Weak bearish</td>
+        <td>Low conviction - do not size up on bias alone.</td>
+      </tr>
+      <tr>
+        <td>Z-score +0.65</td>
+        <td>Moderate deviation</td>
+        <td>Above fair value. Not yet at a high-conviction fade level (±1.5+).</td>
+      </tr>
+      <tr>
+        <td>Fair value 23,348</td>
+        <td>42 pts below price</td>
+        <td>This is your primary target on a short trade.</td>
+      </tr>
+      <tr>
+        <td>Sigma 64 pts</td>
+        <td>Expanded vol (1.5x)</td>
+        <td>All levels are wide. Size smaller than normal vol conditions.</td>
+      </tr>
+      <tr>
+        <td>P(3σ blow-off) 21.8%</td>
+        <td>Meaningful tail risk</td>
+        <td>Nearly 1-in-4 chance the move extends against before reverting.</td>
+      </tr>
+      <tr>
+        <td>Move likely (30 bar)</td>
+        <td>50pt = 55% | 100pt = 5% | 150pt = 0% | 200pt = 0%</td>
+        <td>Near-term expected move window.</td>
+      </tr>
+      <tr>
+        <td>Regime: S3, Young, 2 bars</td>
+        <td>Fading with limited life</td>
+        <td>Good regime for fades, but aging out. Do not enter late..</td>
+      </tr>
+      <tr>
+        <td>Half-life: 28 bars</td>
+        <td>~0 hours to half-reversion</td>
+        <td>Fast reversion — trades resolve quickly.</td>
+      </tr>
+      <tr>
+        <td>Stop: 64 pts</td>
+        <td>1.0x sigma</td>
+        <td>Reasonable stop distance for current conditions.</td>
+      </tr>
+    </table>
+  </div>
+
+  <div class="footer-note">
+    Report generated 2026-03-31 08:23 CST &middot; All levels and probabilities are model estimates, not guarantees &middot; Past regime win rates do not guarantee future results
+  </div>
+
+</div>
+</body>
+</html>
