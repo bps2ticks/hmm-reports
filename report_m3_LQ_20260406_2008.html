@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Composite Regime Report &mdash; m3_LQ</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Barlow:wght@300;400;500;600&family=Barlow+Condensed:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #f7f4ef; --bg2: #eeebe4; --bg3: #e4e0d8;
+  --ink: #1a1814; --ink2: #4a4640; --ink3: #8a857c;
+  --rule: rgba(26,24,20,0.12); --rule2: rgba(26,24,20,0.06);
+  --gold: #b8872a; --gold2: #d4a44c; --teal: #2a7a62;
+  --red: #b03030; --amber: #c07a28; --blue: #2a5a8a;
+  --font-head: 'Playfair Display', Georgia, serif;
+  --font-body: 'Barlow', sans-serif;
+  --font-cond: 'Barlow Condensed', sans-serif;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: var(--font-body); background: var(--bg); color: var(--ink); min-height: 100vh; padding: 0 0 100px; }
+
+.masthead { background: var(--ink); color: var(--bg); padding: 56px 48px 44px; position: relative; overflow: hidden; }
+.masthead::before { content: ''; position: absolute; top: -40px; right: -60px; width: 320px; height: 320px; border-radius: 50%; background: rgba(184,135,42,0.08); pointer-events: none; }
+.masthead-kicker { font-family: var(--font-cond); font-size: 11px; letter-spacing: .22em; text-transform: uppercase; color: var(--gold2); margin-bottom: 18px; }
+.masthead h1 { font-family: var(--font-head); font-size: 46px; font-weight: 600; line-height: 1.1; color: #f0ece3; margin-bottom: 8px; max-width: 600px; }
+.masthead h1 em { font-style: italic; font-weight: 400; color: var(--gold2); }
+.masthead-sub { font-family: var(--font-body); font-weight: 300; font-size: 15px; color: rgba(240,236,227,0.55); margin-top: 14px; letter-spacing: .01em; }
+.masthead-meta { margin-top: 32px; display: flex; gap: 32px; flex-wrap: wrap; }
+.meta-item { display: flex; flex-direction: column; gap: 3px; }
+.meta-label { font-family: var(--font-cond); font-size: 10px; letter-spacing: .18em; text-transform: uppercase; color: rgba(240,236,227,0.38); }
+.meta-value { font-family: var(--font-cond); font-size: 16px; font-weight: 600; color: var(--gold2); letter-spacing: .02em; }
+
+.intro-strip { background: var(--gold); padding: 18px 48px; }
+.intro-strip p { font-size: 14px; font-weight: 500; color: #fff; max-width: 680px; line-height: 1.6; }
+
+.page { max-width: 860px; margin: 0 auto; padding: 0 32px; }
+
+.snapshot { margin: 44px 0 52px; }
+.snapshot-title { font-family: var(--font-cond); font-size: 11px; letter-spacing: .2em; text-transform: uppercase; color: var(--ink3); margin-bottom: 16px; padding-bottom: 8px; border-bottom: 1px solid var(--rule); }
+.snapshot-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--rule); border: 1px solid var(--rule); border-radius: 4px; overflow: hidden; }
+.snap-cell { background: var(--bg); padding: 16px 18px; }
+.snap-cell.accent { background: var(--ink); }
+.snap-label { font-family: var(--font-cond); font-size: 10px; letter-spacing: .15em; text-transform: uppercase; color: var(--ink3); margin-bottom: 5px; }
+.snap-cell.accent .snap-label { color: rgba(255,255,255,0.4); }
+.snap-val { font-family: var(--font-cond); font-size: 22px; font-weight: 600; color: var(--ink); line-height: 1; }
+.snap-cell.accent .snap-val { color: var(--gold2); }
+.snap-note { font-size: 11.5px; color: var(--ink3); margin-top: 4px; line-height: 1.4; }
+.snap-cell.accent .snap-note { color: rgba(255,255,255,0.45); }
+
+.section { margin-bottom: 60px; }
+.section-header { display: flex; align-items: baseline; gap: 16px; margin-bottom: 28px; }
+.section-num { font-family: var(--font-cond); font-size: 11px; letter-spacing: .2em; color: var(--ink3); flex-shrink: 0; }
+.section-rule { flex: 1; height: 1px; background: var(--rule); }
+.section-tag { font-family: var(--font-cond); font-size: 10px; letter-spacing: .15em; text-transform: uppercase; padding: 3px 10px; border-radius: 2px; font-weight: 600; flex-shrink: 0; }
+.tag-gold { background: var(--gold); color: #fff; }
+.tag-teal { background: var(--teal); color: #fff; }
+.tag-amber { background: var(--amber); color: #fff; }
+.tag-blue { background: var(--blue); color: #fff; }
+.tag-red { background: var(--red); color: #fff; }
+.tag-ink { background: var(--ink); color: var(--gold2); }
+h2 { font-family: var(--font-head); font-size: 30px; font-weight: 400; color: var(--ink); line-height: 1.2; }
+
+.stat-block { margin-bottom: 28px; }
+.stat-header { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
+.stat-name { font-family: var(--font-cond); font-size: 13px; letter-spacing: .06em; font-weight: 600; color: var(--ink); text-transform: uppercase; }
+.stat-reading { font-family: var(--font-cond); font-size: 12px; color: var(--teal); font-weight: 600; letter-spacing: .04em; padding: 2px 8px; background: rgba(42,122,98,0.08); border-radius: 2px; }
+.stat-reading.warn { color: var(--amber); background: rgba(192,122,40,0.08); }
+.stat-reading.danger { color: var(--red); background: rgba(176,48,48,0.08); }
+.stat-reading.neutral { color: var(--ink3); background: var(--bg2); }
+.stat-explain { font-size: 14.5px; color: var(--ink2); line-height: 1.72; }
+.stat-divider { border: none; border-top: 1px solid var(--rule2); margin: 22px 0; }
+
+.callout { border-left: 3px solid var(--teal); background: rgba(42,122,98,0.05); padding: 14px 18px; border-radius: 0 4px 4px 0; margin: 20px 0; font-size: 14px; color: var(--ink2); line-height: 1.68; }
+.callout.amber { border-left-color: var(--amber); background: rgba(192,122,40,0.05); }
+.callout.red { border-left-color: var(--red); background: rgba(176,48,48,0.05); }
+.callout.gold { border-left-color: var(--gold); background: rgba(184,135,42,0.05); }
+.callout.ink { border-left-color: var(--ink); background: var(--bg2); }
+.callout strong { font-weight: 600; color: var(--ink); display: block; margin-bottom: 4px; font-family: var(--font-cond); letter-spacing: .04em; font-size: 13px; text-transform: uppercase; }
+
+.plain-box { background: var(--ink); color: #f0ece3; border-radius: 6px; padding: 24px 28px; margin: 24px 0; }
+.plain-label { font-family: var(--font-cond); font-size: 10px; letter-spacing: .2em; text-transform: uppercase; color: var(--gold2); margin-bottom: 10px; }
+.plain-text { font-family: var(--font-head); font-style: italic; font-size: 16px; line-height: 1.75; color: rgba(240,236,227,0.85); }
+
+.level-ladder { background: var(--bg2); border: 1px solid var(--rule); border-radius: 6px; overflow: hidden; margin: 20px 0; font-family: var(--font-cond); }
+.level-row { display: grid; grid-template-columns: 60px 1fr 80px 140px; align-items: center; gap: 12px; padding: 10px 18px; border-bottom: 1px solid var(--rule2); }
+.level-row:last-child { border-bottom: none; }
+.level-row.current { background: rgba(42,122,98,0.07); }
+.level-row.fv { background: rgba(184,135,42,0.07); }
+.lv-label { font-size: 12px; font-weight: 600; color: var(--ink3); letter-spacing: .04em; }
+.lv-bar-wrap { position: relative; height: 5px; background: var(--bg3); border-radius: 3px; }
+.lv-bar { position: absolute; top: 0; height: 100%; border-radius: 3px; }
+.lv-price { font-size: 14px; font-weight: 600; color: var(--ink); text-align: right; }
+.lv-desc { font-size: 12px; color: var(--ink3); text-align: right; }
+
+.practical-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 20px 0; }
+.pcard { background: var(--bg2); border: 1px solid var(--rule); border-radius: 6px; padding: 18px 20px; }
+.pcard-num { font-family: var(--font-cond); font-size: 28px; font-weight: 600; color: var(--gold); line-height: 1; margin-bottom: 8px; opacity: .7; }
+.pcard strong { font-family: var(--font-cond); font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: .06em; color: var(--ink); display: block; margin-bottom: 5px; }
+.pcard p { font-size: 13px; color: var(--ink2); line-height: 1.62; }
+
+.trans-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin: 16px 0; }
+.trans-card { background: var(--bg2); border: 1px solid var(--rule); border-radius: 4px; padding: 14px; text-align: center; }
+.trans-pct { font-family: var(--font-cond); font-size: 22px; font-weight: 600; margin-bottom: 4px; }
+.trans-lbl { font-family: var(--font-cond); font-size: 11px; color: var(--ink3); line-height: 1.4; letter-spacing: .04em; }
+
+.move-row { display: grid; grid-template-columns: 80px 1fr 60px; align-items: center; gap: 14px; padding: 10px 0; border-bottom: 1px solid var(--rule2); }
+.move-row:last-child { border-bottom: none; }
+.move-label { font-family: var(--font-cond); font-size: 13px; font-weight: 600; color: var(--ink); }
+.move-bar-wrap { background: var(--bg3); height: 8px; border-radius: 4px; }
+.move-bar { height: 100%; border-radius: 4px; }
+.move-pct { font-family: var(--font-cond); font-size: 14px; font-weight: 600; text-align: right; }
+
+.summary-table { width: 100%; border-collapse: collapse; font-size: 13px; margin: 20px 0; }
+.summary-table th { font-family: var(--font-cond); font-size: 10px; letter-spacing: .15em; text-transform: uppercase; color: var(--ink3); padding: 8px 14px; text-align: left; border-bottom: 1.5px solid var(--rule); font-weight: 500; }
+.summary-table td { padding: 11px 14px; border-bottom: 1px solid var(--rule2); vertical-align: top; line-height: 1.55; }
+.summary-table td:first-child { font-family: var(--font-cond); font-size: 12px; font-weight: 600; color: var(--gold); white-space: nowrap; }
+.summary-table td:nth-child(2) { font-family: var(--font-cond); font-size: 13px; font-weight: 600; color: var(--teal); }
+.summary-table td:nth-child(3) { color: var(--ink2); }
+
+.footer { margin-top: 80px; padding: 28px 32px; max-width: 860px; margin-left: auto; margin-right: auto; border-top: 1px solid var(--rule); font-family: var(--font-cond); font-size: 11.5px; color: var(--ink3); line-height: 1.7; letter-spacing: .02em; }
+
+@media (max-width: 600px) {
+  .masthead { padding: 36px 24px 32px; }
+  .masthead h1 { font-size: 32px; }
+  .intro-strip { padding: 16px 24px; }
+  .page { padding: 0 18px; }
+  .snapshot-grid { grid-template-columns: 1fr 1fr; }
+  .practical-grid { grid-template-columns: 1fr; }
+  .trans-grid { grid-template-columns: repeat(2, 1fr); }
+  .level-row { grid-template-columns: 50px 1fr 70px; }
+  .lv-desc { display: none; }
+}
+</style>
+</head>
+<body>
+
+<!-- MASTHEAD -->
+<div class="masthead">
+  <div class="masthead-kicker">m3_LQ Strategy &middot; Regime Report &middot; 2026-04-06 19:08 CST</div>
+  <h1>Composite<br><em>Regime Report</em></h1>
+  <p class="masthead-sub">NQ E-Mini Futures &middot; 1-Minute Bars &middot; Generated 2026-04-06 19:08 CST</p>
+  <div class="masthead-meta">
+    <div class="meta-item"><span class="meta-label">Fair Value</span><span class="meta-value">24,320</span></div>
+    <div class="meta-item"><span class="meta-label">Current Price</span><span class="meta-value">24,312</span></div>
+    <div class="meta-item"><span class="meta-label">Sigma</span><span class="meta-value">25 pts</span></div>
+    <div class="meta-item"><span class="meta-label">Regime</span><span class="meta-value">Neutral (S2) Young</span></div>
+    <div class="meta-item"><span class="meta-label">Bias</span><span class="meta-value">Neutral 0%</span></div>
+  </div>
+</div>
+
+<!-- INTRO STRIP -->
+<div class="intro-strip">
+  <p>This report explains every number using plain language &mdash; what each stat means, why it matters, and exactly how to apply it. All values are drawn directly from live model output generated at 2026-04-06 19:08 CST. Nothing here is estimated or assumed.</p>
+</div>
+
+<div class="page">
+
+  <!-- SNAPSHOT -->
+  <div class="snapshot">
+    <div class="snapshot-title">At-a-Glance Snapshot &mdash; All figures from this session&rsquo;s report</div>
+    <div class="snapshot-grid">
+      <div class="snap-cell accent">
+        <div class="snap-label">Directional Bias</div>
+        <div class="snap-val">Neutral</div>
+        <div class="snap-note">0% strength — low conviction</div>
+      </div>
+      <div class="snap-cell">
+        <div class="snap-label">Z-Score</div>
+        <div class="snap-val">-0.34</div>
+        <div class="snap-note">Price is 8 pts below fair value</div>
+      </div>
+      <div class="snap-cell">
+        <div class="snap-label">Regime State</div>
+        <div class="snap-val">Neutral (S2) Young</div>
+        <div class="snap-note">Fade setup, recently started</div>
+      </div>
+      <div class="snap-cell">
+        <div class="snap-label">Sigma (1 Std Dev)</div>
+        <div class="snap-val">25 pts</div>
+        <div class="snap-note">Normal volatility</div>
+      </div>
+      <div class="snap-cell">
+        <div class="snap-label">Blow-Off Risk</div>
+        <div class="snap-val">0.0%</div>
+        <div class="snap-note">Negligible — price near fair value</div>
+      </div>
+      <div class="snap-cell">
+        <div class="snap-label">Half-Life</div>
+        <div class="snap-val">26 bars</div>
+        <div class="snap-note">26 minutes to half-reversion</div>
+      </div>
+    </div>
+  </div>
+
+  
+
+  <!-- 01 BIAS -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-num">01</span>
+      <div class="section-rule"></div>
+      <span class="section-tag tag-gold">Bias</span>
+    </div>
+    <h2>What is the market&rsquo;s directional lean?</h2>
+    <div style="margin-top:24px;">
+
+      <div class="stat-block">
+        <div class="stat-header">
+          <span class="stat-name">Overall Bias: Neutral (0%)</span>
+          <span class="stat-reading warn">Weak neutral lean</span>
+        </div>
+        <p class="stat-explain">The model sees no meaningful directional lean right now. Stay flat or wait for a clearer signal.</p>
+      </div>
+      <hr class="stat-divider">
+
+      <div class="stat-block">
+        <div class="stat-header">
+          <span class="stat-name">Z-Score: -0.34</span>
+          <span class="stat-reading">Below fair value</span>
+        </div>
+        <p class="stat-explain">The z-score tells you how far price is from fair value, measured in standard deviations. A z-score of -0.34 means price is currently sitting 0.34 &ldquo;units of normal movement&rdquo; below where the model thinks it should be &mdash; that&rsquo;s 8 NQ points below fair value of 24,320. The z-score is the primary input to directional bias: because price is below fair value, the model leans long (bullish), expecting a pull back toward 24,320. The further the z-score extends &mdash; toward &plusmn;1.5, &plusmn;2.0, &plusmn;2.5 &mdash; the stronger that pull becomes and the more interesting a fade entry gets. At -0.34, we are not there yet.</p>
+      </div>
+      <hr class="stat-divider">
+
+      <div class="stat-block">
+        <div class="stat-header">
+          <span class="stat-name">HMM: Neutral (S2) Lean Fade (64%)</span>
+          <span class="stat-reading">Moderate fade tendency</span>
+        </div>
+        <p class="stat-explain">The Hidden Markov Model (HMM) classifies the market into behavioral regimes &mdash; states that describe how the market is acting right now. Currently it reads Neutral (S2), which is a &ldquo;lean fade&rdquo; regime &mdash; the model sees moderate mean-reversion tendencies. The 64% figure is the historical win rate for fade trades when the market is in this regime. That is meaningful over many trades.</p>
+      </div>
+      <hr class="stat-divider">
+
+      <div class="stat-block">
+        <div class="stat-header">
+          <span class="stat-name">Bayesian Drift: -0.2620 pts/bar</span>
+          <span class="stat-reading neutral">Slight downward drift</span>
+        </div>
+        <p class="stat-explain">The model estimates price is drifting down by 0.2620 points per bar. Over 30 bars that’s roughly 7.9 points — enough to consider as a factor.</p>
+      </div>
+
+    </div>
+
+    
+
+    <div class="plain-box">
+      <div class="plain-label">Plain-English Summary</div>
+      <div class="plain-text">&ldquo;Price is 8 points below where the model thinks it belongs. The market is in a regime historically favorable to fading — but the composite signal is too weak to act on (0% strength). Conflicting inputs have neutralized the directional lean. Wait for a clearer signal before committing.&rdquo;</div>
+    </div>
+  </div>
+
+  <!-- 02 LEVELS -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-num">02</span>
+      <div class="section-rule"></div>
+      <span class="section-tag tag-teal">Levels</span>
+    </div>
+    <h2>Where are the key price targets?</h2>
+    <div style="margin-top:24px;">
+
+      <div class="stat-block">
+        <div class="stat-header">
+          <span class="stat-name">Fair Value: 24,320</span>
+          <span class="stat-reading">The magnet</span>
+        </div>
+        <p class="stat-explain">Fair value is the price the model calculates as the statistical center of gravity &mdash; where price is expected to return when it deviates. Every other level on the report is built outward from this number in multiples of sigma. When you are in a fade trade, fair value is your primary target. Think of it as a rubber band anchor: the further price stretches away, the more tension builds to pull it back. Right now, price is at 24,312 &mdash; which is 8 points below fair value at 24,320. A long fade trade initiated below fair value would target this level as the first exit.</p>
+      </div>
+      <hr class="stat-divider">
+
+      <div class="stat-block">
+        <div class="stat-header">
+          <span class="stat-name">Sigma: 25 pts/sigma (1.1&times; normal)</span>
+          <span class="stat-reading">Normal range</span>
+        </div>
+        <p class="stat-explain">Sigma is the model&rsquo;s measure of one &ldquo;normal&rdquo; move &mdash; one standard deviation of price movement under current conditions. Every level in this report is a multiple of this number. Currently sigma is 25 NQ points. Volatility is at normal levels for this instrument.</p>
+      </div>
+
+    </div>
+
+    <div class="level-ladder">
+      <div class="level-row" style="background:rgba(176,48,48,0.05)"><div class="lv-label" style="color:var(--red);">+3σ</div><div class="lv-bar-wrap"><div class="lv-bar" style="left:100%;right:0;background:var(--red);opacity:.4;"></div></div><div class="lv-price" style="color:var(--red);">24,395</div><div class="lv-desc" style="color:var(--red);">Blow-off / stop zone</div></div>
+      <div class="level-row" style="background:rgba(192,122,40,0.05)"><div class="lv-label" style="color:var(--amber);">+2σ</div><div class="lv-bar-wrap"><div class="lv-bar" style="left:83%;right:0;background:var(--amber);opacity:.5;"></div></div><div class="lv-price" style="color:var(--amber);">24,370</div><div class="lv-desc" style="color:var(--amber);">Fade zone — upper</div></div>
+      <div class="level-row"><div class="lv-label" style="color:var(--teal);">+1σ</div><div class="lv-bar-wrap"><div class="lv-bar" style="left:67%;right:0;background:var(--teal);opacity:.35;"></div></div><div class="lv-price" style="color:var(--teal);">24,345</div><div class="lv-desc" style="color:var(--teal);">Upper equilibrium</div></div>
+      <div class="level-row fv"><div class="lv-label" style="color:var(--gold);font-weight:700;">FV</div><div class="lv-bar-wrap"><div class="lv-bar" style="left:50%;width:3%;background:var(--gold);"></div></div><div class="lv-price" style="color:var(--gold);">24,320</div><div class="lv-desc" style="color:var(--gold);">Primary target</div></div>
+      <div class="level-row current"><div class="lv-label" style="color:var(--teal);font-weight:700;">Now</div><div class="lv-bar-wrap"><div class="lv-bar" style="left:44%;width:4%;background:var(--teal);"></div></div><div class="lv-price" style="color:var(--teal);">24,312</div><div class="lv-desc" style="color:var(--teal);">z = -0.34</div></div>
+      <div class="level-row"><div class="lv-label" style="color:var(--teal);">−1σ</div><div class="lv-bar-wrap"><div class="lv-bar" style="left:0;right:67%;background:var(--teal);opacity:.35;"></div></div><div class="lv-price" style="color:var(--ink2);">24,295</div><div class="lv-desc" style="color:var(--teal);">Lower equilibrium</div></div>
+      <div class="level-row" style="background:rgba(192,122,40,0.05)"><div class="lv-label" style="color:var(--amber);">−2σ</div><div class="lv-bar-wrap"><div class="lv-bar" style="left:0;right:83%;background:var(--amber);opacity:.5;"></div></div><div class="lv-price" style="color:var(--amber);">24,270</div><div class="lv-desc" style="color:var(--amber);">Fade zone — lower</div></div>
+      <div class="level-row" style="background:rgba(176,48,48,0.05)"><div class="lv-label" style="color:var(--red);">−3σ</div><div class="lv-bar-wrap"><div class="lv-bar" style="left:0;right:100%;background:var(--red);opacity:.4;"></div></div><div class="lv-price" style="color:var(--red);">24,245</div><div class="lv-desc" style="color:var(--red);">Blow-off / stop zone</div></div>
+    </div>
+
+    <div class="callout gold">
+      <strong>How to apply these levels in practice</strong>
+      Price is currently between -1σ and fair value. The lower levels act as caution zones. The ±2σ levels (24,370 and 24,270) are the high-conviction fade zones. The ±3σ levels (24,395 and 24,245) are blow-off territory &mdash; extreme and rare, but with a 0.0% expansion probability today, very unlikely. For a long fade scenario, fair value at 24,320 is your first target: 8 NQ points of expected move.
+    </div>
+
+    <div class="practical-grid">
+      <div class="pcard">
+        <div class="pcard-num">T1</div>
+        <strong>Primary Target</strong>
+        <p>Fair value at 24,320 &mdash; 8 pts above current price. This is the level price is statistically pulled toward in a fade trade.</p>
+      </div>
+      <div class="pcard">
+        <div class="pcard-num">T2</div>
+        <strong>Extended Target</strong>
+        <p>+1σ at 24,345 &mdash; 33 pts above current. Only relevant if the trade runs through fair value with momentum.</p>
+      </div>
+      <div class="pcard">
+        <div class="pcard-num">E1</div>
+        <strong>Better Entry Zone</strong>
+        <p>−1σ at 24,295 &mdash; 17 pts below. If price pushes there, the fade setup improves as z approaches ±1.0.</p>
+      </div>
+      <div class="pcard">
+        <div class="pcard-num">S1</div>
+        <strong>Stop Region</strong>
+        <p>−2σ at 24,270 or 1σ above entry. At current sigma of 25 pts, the model recommends a 23-pt stop minimum.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 03 EXPANSION -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-num">03</span>
+      <div class="section-rule"></div>
+      <span class="section-tag tag-amber">Expansion</span>
+    </div>
+    <h2>How far could the move extend before reversing?</h2>
+    <div style="margin-top:24px;">
+
+      <div class="stat-block">
+        <div class="stat-header">
+          <span class="stat-name">P(3σ before Fair Value): 0.0%</span>
+          <span class="stat-reading">Low blow-off risk</span>
+        </div>
+        <p class="stat-explain">This is the probability that price pushes all the way to 3σ (downside 24,245) before it ever touches fair value (24,320). Only a 0% chance price reaches the 3-sigma extreme before reverting to fair value. Blow-off risk is low — fades have room to work. If you stop tighter than sigma, you may get knocked out during the adverse move before the reversion plays out.</p>
+      </div>
+      <hr class="stat-divider">
+
+      <div class="stat-block">
+        <div class="stat-header">
+          <span class="stat-name">Sigma: 25 pts (Normal Vol, 1.1&times;)</span>
+          <span class="stat-reading">Normal vol</span>
+        </div>
+        <p class="stat-explain">Volatility is at normal levels. Standard sizing applies.</p>
+      </div>
+      <hr class="stat-divider">
+
+      <div class="stat-block">
+        <div class="stat-header">
+          <span class="stat-name">GARCH Vol: 0.0008 | Persistence: 0.50</span>
+          <span class="stat-reading">Weak vol clustering</span>
+        </div>
+        <p class="stat-explain">GARCH persistence is low &mdash; volatility is not strongly autocorrelated right now. Today&rsquo;s vol may not carry into the next session.</p>
+      </div>
+
+    </div>
+    
+  </div>
+
+  <!-- 04 MOVE LIKELIHOOD -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-num">04</span>
+      <div class="section-rule"></div>
+      <span class="section-tag tag-blue">Move Likelihood</span>
+    </div>
+    <h2>What size move is probable in the next 30 minutes?</h2>
+
+    <div style="margin-top:24px; margin-bottom:20px;">
+      <div class="move-row"><div class="move-label">50 pts</div><div class="move-bar-wrap"><div class="move-bar" style="width:7%;background:var(--red);"></div></div><div class="move-pct" style="color:var(--red);">7%</div></div>
+      <div class="move-row"><div class="move-label">100 pts</div><div class="move-bar-wrap"><div class="move-bar" style="width:1%;background:var(--ink3);"></div></div><div class="move-pct" style="color:var(--ink3);">~0%</div></div>
+      <div class="move-row"><div class="move-label">150 pts</div><div class="move-bar-wrap"><div class="move-bar" style="width:1%;background:var(--ink3);"></div></div><div class="move-pct" style="color:var(--ink3);">~0%</div></div>
+      <div class="move-row"><div class="move-label">200 pts</div><div class="move-bar-wrap"><div class="move-bar" style="width:1%;background:var(--ink3);"></div></div><div class="move-pct" style="color:var(--ink3);">~0%</div></div>
+      
+    </div>
+
+    <div class="stat-block">
+      <p class="stat-explain">A 50-point move is highly unlikely at 7%. Moves of 100 points in 30 minutes are essentially impossible given today’s parameters. Moves of 150 points in 30 minutes are essentially impossible given today’s parameters. Moves of 200 points in 30 minutes are essentially impossible given today’s parameters. These are not predictions of direction — they’re estimates of range. Use them to set realistic targets.</p>
+    </div>
+    <hr class="stat-divider">
+
+    <div class="stat-block">
+      <div class="stat-header">
+        <span class="stat-name">Posterior Confidence: Confident</span>
+        <span class="stat-reading">Model trusts its own estimates</span>
+      </div>
+      <p class="stat-explain">Confident means the Bayesian model has enough data that its parameter estimates are tight — the uncertainty bands around fair value and sigma are narrow. The model’s math is on solid footing. Trade toward the levels with conviction.</p>
+    </div>
+    <hr class="stat-divider">
+
+    <div class="stat-block">
+      <div class="stat-header">
+        <span class="stat-name">Recommended Stop: 0.9&times; sigma (23 pts)</span>
+        <span class="stat-reading warn">Standard stop distance</span>
+      </div>
+      <p class="stat-explain">The model recommends a 23-point stop &mdash; 0.9&times; sigma. This is the minimum stop distance that gives the trade room to breathe without being knocked out by normal volatility noise. A stop tighter than 23 points has a high probability of being hit by random price movement before the mean-reversion has time to play out. If 23 points is too large for your risk tolerance, trade fewer contracts &mdash; not a tighter stop. Reducing size preserves the structural integrity of the trade.</p>
+    </div>
+
+    <div class="practical-grid">
+      <div class="pcard">
+        <div class="pcard-num">01</div>
+        <strong>Use move probs as a target filter</strong>
+        <p>A 50-pt move is achievable. Don&rsquo;t set a target the model gives essentially zero probability today.</p>
+      </div>
+      <div class="pcard">
+        <div class="pcard-num">02</div>
+        <strong>Respect the 23-pt stop</strong>
+        <p>This is not arbitrary. It&rsquo;s the distance below which normal market noise has a high probability of stopping you out before the trade works.</p>
+      </div>
+      <div class="pcard">
+        <div class="pcard-num">03</div>
+        <strong>&ldquo;Confident&rdquo; = trust the levels</strong>
+        <p>When the posterior is confident, the fair value and sigma levels are reliable. Trade toward them with conviction.</p>
+      </div>
+      <div class="pcard">
+        <div class="pcard-num">04</div>
+        <strong>30 bars = 30 minutes</strong>
+        <p>These probabilities apply to the next half hour on a 1-minute chart. They are not all-day forecasts. Set targets the model says are achievable in this window.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 05 REGIME -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-num">05</span>
+      <div class="section-rule"></div>
+      <span class="section-tag tag-red">Regime</span>
+    </div>
+    <h2>What mode is the market currently in?</h2>
+    <div style="margin-top:24px;">
+
+      <div class="stat-block">
+        <div class="stat-header">
+          <span class="stat-name">State: Neutral (S2) &mdash; Lean Fade</span>
+          <span class="stat-reading">Favorable for fading</span>
+        </div>
+        <p class="stat-explain">The regime is Neutral (S2), which the model classifies as a lean fade state with 64% historical win rate. The model sees moderate mean-reversion tendencies.</p>
+      </div>
+      <hr class="stat-divider">
+
+      <div class="stat-block">
+        <div class="stat-header">
+          <span class="stat-name">Age: Young &mdash; Recently Flipped</span>
+          <span class="stat-reading warn">New regime, handle with care</span>
+        </div>
+        <p class="stat-explain">The &ldquo;Young&rdquo; label is critical context. This regime just started &mdash; it has not been running long enough to be fully trusted. Young regimes are real, but fragile. They are statistically more likely to flip back or transition to a different state than a mature regime that has been running for many bars. The practical implication: you can trade it, but with awareness that the ground could shift quickly beneath the trade.</p>
+      </div>
+      <hr class="stat-divider">
+
+      <div class="stat-block">
+        <div class="stat-header">
+          <span class="stat-name">Remaining: ~1 bars | P(persist 5 bars): 4%</span>
+          <span class="stat-reading danger">Regime is aging out</span>
+        </div>
+        <p class="stat-explain">The model estimates roughly 1 more bars of expected life left in this Neutral regime. There is only a 4% chance it persists for 5 more bars &mdash; meaning 96% of the time, the regime has shifted before bar 5. This is the sharpest warning in the report: do not enter a new trade that requires the Neutral regime to remain valid for 5+ bars. The regime that validates your trade setup is about to change.</p>
+      </div>
+
+    </div>
+
+    <div style="margin-top:16px; margin-bottom:4px; font-family:var(--font-cond); font-size:11px; letter-spacing:.12em; text-transform:uppercase; color:var(--ink3);">Regime Transition Probabilities (next bar)</div>
+    <div class="trans-grid">
+      <div class="trans-card"><div class="trans-pct" style="color:var(--amber);">38%</div><div class="trans-lbl">&rarr; Fade<br>Moderate shift</div></div>
+      <div class="trans-card"><div class="trans-pct" style="color:var(--ink3);">9%</div><div class="trans-lbl">&rarr; Trend<br>Low probability</div></div>
+      <div class="trans-card"><div class="trans-pct" style="color:var(--teal);">53%</div><div class="trans-lbl">Stay Neutral<br>Most likely</div></div>
+      <div class="trans-card"><div class="trans-pct" style="color:var(--ink3);">0%</div><div class="trans-lbl">&rarr; Trend<br>Very low</div></div>
+      
+    </div>
+
+    <div class="callout red">
+      <strong>How to read the transition grid</strong>
+      Bar-by-bar, there&rsquo;s a 53% chance Neutral holds for one more bar. But &ldquo;Young + ~1 bars remaining + 4% chance of surviving 5 bars&rdquo; tells a different story over a trade horizon. Each bar has a 47% chance of flipping. Over 5 bars, that compounds. Do not initiate new trades that require the Neutral regime to support them past the next 2 bars.
+    </div>
+  </div>
+
+  <!-- 06 O-U DIAGNOSTICS -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-num">06</span>
+      <div class="section-rule"></div>
+      <span class="section-tag tag-ink">O-U Diagnostics</span>
+    </div>
+    <h2>Is the mean-reversion framework valid right now?</h2>
+    <div style="margin-top:24px;">
+
+      <div class="stat-block">
+        <div class="stat-header">
+          <span class="stat-name">Mean Reversion Confirmed: Yes</span>
+          <span class="stat-reading">Framework is valid</span>
+        </div>
+        <p class="stat-explain">The Ornstein-Uhlenbeck (O-U) model has run its statistical test and confirmed that this instrument &mdash; NQ 1-minute futures at this time &mdash; is currently exhibiting mean-reverting behavior. This is the foundation the entire report stands on. If this said &ldquo;No,&rdquo; every other stat in the report would be unreliable. &ldquo;Yes&rdquo; means the physics of the model are working: deviations from fair value are statistically expected to revert. All of the levels, targets, and probabilities in this report are valid under this confirmation.</p>
+      </div>
+      <hr class="stat-divider">
+
+      <div class="stat-block">
+        <div class="stat-header">
+          <span class="stat-name">Theta: 0.0271</span>
+          <span class="stat-reading">Strong mean-reversion pull</span>
+        </div>
+        <p class="stat-explain">Theta is the reversion speed &mdash; a measure of how strongly price is pulled back toward fair value each bar. A higher theta means a stronger snap-back tendency. At 0.0271, this is a strong pull &mdash; the model is telling you that once price deviates, it gets yanked back. This is consistent with the 26-bar half-life: strong theta means fast reversion and trades resolve quickly.</p>
+      </div>
+      <hr class="stat-divider">
+
+      <div class="stat-block">
+        <div class="stat-header">
+          <span class="stat-name">Half-Life: 26 bars (~26 minutes)</span>
+          <span class="stat-reading">Fast reversion environment</span>
+        </div>
+        <p class="stat-explain">The half-life tells you how many bars it typically takes for half of the deviation from fair value to close. At 26 bars on a 1-minute chart, that means roughly 26 minutes to half-reversion. In practice: a trade entered at the current 8-point deviation from fair value would, on average, see about 4 points of that deviation close within 26 minutes. This is a fast-reversion environment &mdash; trades are not expected to grind for hours. If a trade has not made progress within the expected half-life window, that is a signal the regime or conditions may have changed.</p>
+      </div>
+      <hr class="stat-divider">
+
+      <div class="stat-block">
+        <div class="stat-header">
+          <span class="stat-name">GARCH Conditional Vol: 0.0008</span>
+          <span class="stat-reading">Today&rsquo;s session-level volatility</span>
+        </div>
+        <p class="stat-explain">The GARCH(1,1) model estimates today&rsquo;s per-bar conditional volatility from the anchor window returns. This value is blended with the O-U per-state sigma to produce the vol multiplier (1.1&times;) used throughout the report. A higher GARCH conditional vol means the anchor session is running hotter than its historical average for this regime.</p>
+      </div>
+      <hr class="stat-divider">
+
+      <div class="stat-block">
+        <div class="stat-header">
+          <span class="stat-name">GARCH Persistence (&alpha;+&beta;): 0.50</span>
+          <span class="stat-reading">Weak autocorrelation</span>
+        </div>
+        <p class="stat-explain">Persistence measures how strongly today&rsquo;s volatility predicts the next bar&rsquo;s volatility. At 0.50, vol shocks decay quickly &mdash; current volatility is not strongly predictive of future bars. Stop distance has been tightened by 10% due to low persistence.</p>
+      </div>
+      <hr class="stat-divider">
+
+      <div class="stat-block">
+        <div class="stat-header">
+          <span class="stat-name">GARCH Vol Forecast (next 30 bars)</span>
+          <span class="stat-reading">Elevated trajectory</span>
+        </div>
+        <p class="stat-explain">GARCH projects conditional vol at 18.8 pts/bar now, converging to 18.9 pts/bar by bar 30. Vol is roughly flat &mdash; expect similar conditions throughout the trade window.</p>
+      </div>
+      <hr class="stat-divider">
+
+      <div class="stat-block">
+        <div class="stat-header">
+          <span class="stat-name">O-U Fit Quality (R&sup2;): 0.89</span>
+          <span class="stat-reading">Strong fit</span>
+        </div>
+        <p class="stat-explain">R&sup2; of 0.89 is strong &mdash; the mean-reversion model explains most of the price variation in the anchor window. High confidence in fair value and level estimates.</p>
+      </div>
+
+    </div>
+
+    
+
+    <div class="callout ink">
+      <strong>Why O-U confirmation matters</strong>
+      These three diagnostics &mdash; MR: Yes, Theta, and Half-Life &mdash; are the engine room of the report. &ldquo;MR: Yes&rdquo; turns the engine on. Theta tells you how powerful the engine is. Half-life tells you how long the ride takes. All three together confirm: this is a valid mean-reversion environment. The framework earns its credibility today.
+    </div>
+  </div>
+
+  <!-- QR SUMMARY -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-num">QR</span>
+      <div class="section-rule"></div>
+      <span class="section-tag tag-teal">Quick Reference</span>
+    </div>
+    <h2>All stats at a glance</h2>
+
+    <table class="summary-table">
+      <thead>
+        <tr><th>Stat</th><th>Reading</th><th>What it means for you</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Bias: Neutral 0%</td><td>Weak neutral</td><td>Low conviction — do not size up on bias alone.</td></tr>
+        <tr><td>Z-Score: -0.34</td><td>Near fair value</td><td>8 pts below fair value. Not yet at a high-conviction fade level (±1.5+).</td></tr>
+        <tr><td>Fair Value: 24,320</td><td>8 pts above price</td><td>Your primary target on a long fade trade. The statistical magnet.</td></tr>
+        <tr><td>Sigma: 25 pts (1.1×)</td><td>Normal volatility</td><td>Standard sizing applies.</td></tr>
+        <tr><td>P(3σ blow-off): 0.0%</td><td>Low tail risk</td><td>Blow-off risk is low — fades have room.</td></tr>
+        <tr><td>Move (30 bars)</td><td>50pt=7% | 100pt=0% | 150pt=0% | 200pt=0%</td><td>Set targets the model says are achievable in this window.</td></tr>
+        <tr><td>Regime: Neutral (S2), Young</td><td>Fading, ~1 bars left</td><td>Historically 64% win rate for fades — but regime has ~1 bars of life left.</td></tr>
+        <tr><td>P(persist 5 bars): 4%</td><td>Regime aging out</td><td>96% chance the regime flips before bar 5. Do not enter trades requiring this regime to hold long.</td></tr>
+        <tr><td>MR Confirmed: Yes</td><td>Framework valid</td><td>The O-U model is statistically confirmed active. All levels and targets are grounded.</td></tr>
+        <tr><td>Half-Life: 26 bars</td><td>~26 min to half-rev</td><td>Fast reversion — trades resolve in minutes, not hours.</td></tr>
+        <tr><td>Stop: 23 pts (0.9× σ)</td><td>Minimum stop</td><td>Below 23 pts, normal noise will stop you out before the trade works. Reduce size, not stop.</td></tr>
+        <tr><td>Posterior: Confident</td><td>Model is certain</td><td>When the posterior is confident, the fair value and sigma levels are reliable. Trade toward them with conviction.</td></tr>
+        
+      </tbody>
+    </table>
+  </div>
+
+</div>
+
+<div class="footer">
+  Report generated 2026-04-06 19:08 CST &middot; NQ E-Mini Futures, 1-Minute Bars &middot; m3_LQ Strategy &middot; All model outputs are probabilistic estimates, not guarantees &middot; Past regime win rates do not guarantee future results
+</div>
+
+</body>
+</html>
